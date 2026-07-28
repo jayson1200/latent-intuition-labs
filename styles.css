@@ -1,0 +1,558 @@
+/*
+ * Latent Intuition Labs — parent company site.
+ *
+ * One stylesheet, no build step, no dependencies. The palette is the same
+ * one Cognometrist uses (midnight and paper, a slate accent, a brass
+ * highlight), expressed as custom properties so prefers-color-scheme can
+ * swap the whole theme in one place. Light is the default; the dark block
+ * below overrides only the palette.
+ *
+ * Type is a system stack rather than a webfont: nothing here loads from a
+ * network, so the page works offline and from file://.
+ */
+
+:root {
+  --acc: #5d737e;
+  --acc-strong: #3d545f;
+  --bg: #fcfcfc;
+  --bg-sunken: #f1f3f4;
+  --brass: #b98f1e;
+  --card: #fff;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+      'Liberation Mono', monospace;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif;
+  --font-serif: ui-serif, Georgia, 'Iowan Old Style', 'Palatino Linotype',
+      'Times New Roman', Times, serif;
+  --line: rgba(2, 17, 27, 0.14);
+  --pad: clamp(20px, 5vw, 56px);
+  /* The one ink that does not follow the theme: a filled accent button is
+     light-on-slate in both palettes, exactly as in the product. */
+  --paper: #fcfcfc;
+  --shadow: 0 8px 30px rgba(2, 17, 27, 0.1);
+  --tx: #02111b;
+  --tx-muted: #55676f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --acc: #5d737e;
+    --acc-strong: #9dbecd;
+    --bg: #02111b;
+    --bg-sunken: #071925;
+    --brass: #d9b44a;
+    --card: #0b1f2c;
+    --line: rgba(252, 252, 252, 0.12);
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    --tx: #fcfcfc;
+    --tx-muted: #8ea3ae;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--tx);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+ol,
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--acc-strong);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--tx);
+}
+
+svg {
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acc-strong);
+  outline-offset: 3px;
+}
+
+/* Layout ------------------------------------------------------------- */
+
+/* Grows on a large monitor instead of sitting in a narrow strip. A flat
+   1080px left roughly 730px of dead space either side of a 2545px
+   viewport -- the content read as a column lost in the middle of the
+   screen. Below about 1740px this still resolves to 1080px, so ordinary
+   laptop widths are unchanged; above it the container widens to a
+   1440px ceiling. Prose does not get longer lines out of this: .prose
+   caps itself at 66ch, so the extra width goes to the card grids, which
+   are auto-fit and can use it. */
+.wrap {
+  margin: 0 auto;
+  max-width: clamp(1080px, 62vw, 1440px);
+  padding: 0 var(--pad);
+  width: 100%;
+}
+
+.skip-link {
+  background: var(--card);
+  border: 1px solid var(--acc-strong);
+  border-radius: 8px;
+  color: var(--tx);
+  left: 12px;
+  padding: 10px 16px;
+  position: absolute;
+  text-decoration: none;
+  top: -100px;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.section {
+  padding-top: clamp(56px, 8vw, 96px);
+}
+
+.section-title {
+  font-size: clamp(26px, 3.4vw, 40px);
+  margin: 8px 0 20px;
+  max-width: 20ch;
+}
+
+/* The small monospaced label that opens every section, as on the product
+   site. */
+.sys {
+  color: var(--tx-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.prose {
+  display: grid;
+  gap: 20px;
+  max-width: 66ch;
+}
+
+.prose p {
+  color: var(--tx-muted);
+}
+
+.fine {
+  color: var(--tx-muted);
+  font-size: 13px;
+  margin-top: 14px;
+}
+
+/* Buttons ------------------------------------------------------------ */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.btn {
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--tx);
+  display: inline-flex;
+  font-size: 15px;
+  font-weight: 600;
+  justify-content: center;
+  padding: 13px 22px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn:hover {
+  border-color: var(--acc-strong);
+  color: var(--tx);
+}
+
+.btn-primary {
+  background: var(--acc);
+  border-color: var(--acc);
+  color: var(--paper);
+}
+
+.btn-primary:hover {
+  background: var(--acc-strong);
+  border-color: var(--acc-strong);
+  color: var(--bg);
+}
+
+/* Masthead ----------------------------------------------------------- */
+
+.masthead {
+  border-bottom: 1px solid var(--line);
+}
+
+.masthead-inner {
+  align-items: center;
+  column-gap: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  padding-top: 14px;
+  row-gap: 8px;
+}
+
+.brand {
+  align-items: center;
+  color: var(--tx);
+  display: inline-flex;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  flex: none;
+  height: 30px;
+  width: 30px;
+}
+
+.brand-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.mark-edge line {
+  stroke: var(--acc);
+  stroke-width: 2.5;
+}
+
+.mark-node circle {
+  fill: var(--acc-strong);
+}
+
+.mark-core {
+  fill: var(--brass);
+}
+
+.masthead-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+
+.masthead-nav a {
+  color: var(--tx-muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.masthead-nav a:hover {
+  color: var(--tx);
+  text-decoration: underline;
+}
+
+/* Hero --------------------------------------------------------------- */
+
+.hero {
+  padding-bottom: clamp(24px, 4vw, 48px);
+  padding-top: clamp(48px, 7vw, 88px);
+}
+
+.hero-inner {
+  align-items: center;
+  display: grid;
+  gap: clamp(32px, 5vw, 64px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.85fr);
+}
+
+.hero-title {
+  font-size: clamp(32px, 4.6vw, 56px);
+  letter-spacing: -0.015em;
+  line-height: 1.14;
+  margin: 10px 0 20px;
+}
+
+.hero-title em {
+  color: var(--acc-strong);
+}
+
+.lede {
+  color: var(--tx-muted);
+  font-size: 17px;
+  line-height: 1.65;
+  max-width: 56ch;
+}
+
+.hero-figure {
+  height: auto;
+  max-width: 340px;
+  width: 100%;
+}
+
+.figure-edge line {
+  opacity: 0.4;
+  stroke: var(--acc);
+  stroke-width: 1.2;
+}
+
+.figure-node circle {
+  fill: var(--acc-strong);
+  opacity: 0.8;
+}
+
+.figure-satellite circle {
+  fill: var(--acc);
+  opacity: 0.5;
+}
+
+.figure-core {
+  fill: var(--brass);
+}
+
+/* Mission ------------------------------------------------------------ */
+
+.pull-quote {
+  border-left: 3px solid var(--brass);
+  font-family: var(--font-serif);
+  font-size: clamp(19px, 2.2vw, 23px);
+  line-height: 1.55;
+  margin: 36px 0 0;
+  max-width: 44ch;
+  padding-left: clamp(18px, 3vw, 28px);
+}
+
+/* Cards -------------------------------------------------------------- */
+
+.claims,
+.principles {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 36px;
+}
+
+.claim,
+.principle {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.claim p,
+.principle p {
+  color: var(--tx-muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.claim-title,
+.principle-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.claim {
+  border-top: 2px solid var(--brass);
+}
+
+/* Product stages ----------------------------------------------------- */
+
+.stages {
+  display: grid;
+  gap: 26px;
+  margin: 36px 0;
+  max-width: 62ch;
+}
+
+.stage {
+  padding-left: 30px;
+  position: relative;
+}
+
+/* The rail joining consecutive stage dots; the last stage has nothing
+   below it to join to. */
+.stage::before {
+  background: var(--line);
+  bottom: -30px;
+  content: '';
+  left: 5px;
+  position: absolute;
+  top: 20px;
+  width: 2px;
+}
+
+.stage:last-child::before {
+  display: none;
+}
+
+.stage::after {
+  background: var(--acc-strong);
+  border-radius: 50%;
+  content: '';
+  height: 12px;
+  left: 0;
+  position: absolute;
+  top: 6px;
+  width: 12px;
+}
+
+.stage-label {
+  color: var(--tx);
+  display: block;
+}
+
+.stage-detail {
+  color: var(--tx-muted);
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+/* Contact ------------------------------------------------------------ */
+
+.contact-email {
+  font-family: var(--font-serif);
+  font-size: clamp(21px, 4.2vw, 30px);
+  margin-top: 26px;
+}
+
+.social {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.social-link {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--tx-muted);
+  display: inline-flex;
+  height: 44px;
+  justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+  width: 44px;
+}
+
+.social-link:hover {
+  border-color: var(--acc-strong);
+  color: var(--tx);
+}
+
+.social-icon {
+  fill: currentcolor;
+  height: 20px;
+  width: 20px;
+}
+
+/* Footer ------------------------------------------------------------- */
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  margin-top: clamp(56px, 8vw, 96px);
+  padding-bottom: 28px;
+  padding-top: 24px;
+}
+
+.footer-inner {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  justify-content: space-between;
+}
+
+.footer-name {
+  color: var(--tx-muted);
+  font-size: 13px;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+}
+
+.footer-nav a {
+  color: var(--tx-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.footer-nav a:hover {
+  color: var(--tx);
+  text-decoration: underline;
+}
+
+/* Narrow screens ----------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-figure {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .masthead-inner {
+    justify-content: flex-start;
+  }
+
+  .section-title {
+    max-width: none;
+  }
+
+  .btn {
+    flex: 1 1 auto;
+  }
+}
