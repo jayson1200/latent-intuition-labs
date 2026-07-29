@@ -23,6 +23,11 @@
     <link href="favicon.svg" rel="icon">
     <link href="fonts.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
+    <script>
+      if (location.pathname.endsWith(".html")) {
+        history.replaceState(null, "", location.pathname.replace(/(?:index)?\.html$/, "") + location.search + location.hash);
+      }
+    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
