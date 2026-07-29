@@ -1,1 +1,6 @@
 .DS_Store
+
+# Local brand assets — not part of the deployed site
+favicon-4096.png
+twitter-banner.png
+twitter-banner.svg
